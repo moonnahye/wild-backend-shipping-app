@@ -1,8 +1,7 @@
-package com.example.demo.model.deliveryevent;
+package com.example.demo.model.event;
 
+import com.example.demo.model.cargo.CargoId;
 import com.example.demo.model.port.PortId;
-import com.example.demo.model.cargo.event.CargoEvent;
-import com.example.demo.model.cargo.event.CargoId;
 
 import java.time.LocalDateTime;
 
@@ -21,9 +20,6 @@ public class DeliveryEvent {
         this.timestamp = timestamp;
     }
 
-    public static DeliveryEvent from(CargoEvent event) {
-        return new DeliveryEvent(event.getCargoId(), event.getPortId(), event.getTimestamp());
-    }
 
     public DeliveryEventId getId() {
         return id;

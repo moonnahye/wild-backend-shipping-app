@@ -1,4 +1,4 @@
-package com.example.demo.model.deliveryevent;
+package com.example.demo.model.event;
 
 import java.util.UUID;
 

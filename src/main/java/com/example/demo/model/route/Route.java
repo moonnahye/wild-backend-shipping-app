@@ -6,41 +6,33 @@ import java.util.ArrayList;
 import java.util.List;
 
 public record Route(
-        List<RouteItem> routeItems
+        List<PortId> portIds
 ) {
     public static Route createRoute(PortId origin, PortId destination) {
-        List<RouteItem> routeItems = new ArrayList<>();
-        routeItems.add(new RouteItem(origin, RouteItemType.ORIGIN));
-        routeItems.add(new RouteItem(new PortId("Balboa"), RouteItemType.TRANSIT));
-        routeItems.add(new RouteItem(destination, RouteItemType.DESTINATION));
 
-        return new Route(routeItems);
+        if (origin == null || destination == null) {
+            throw new IllegalArgumentException("출발지나 도착지가 없습니다.");
+        }
+
+        List<PortId> portIds = new ArrayList<>();
+        portIds.add(origin);
+        portIds.add(new PortId("BALBOA"));
+        portIds.add(destination);
+
+        return new Route(portIds);
     }
 
-    public PortId getOriginPortId() {
-        return routeItems.stream()
-                .filter(routeItem -> routeItem.type().equals(RouteItemType.ORIGIN))
-                .findFirst()
-                .map(RouteItem::portId)
-                .orElseThrow(
-                        () -> new IllegalStateException("Origin port not found")
-                );
+    public PortId getOrigin() {
+        return portIds.getFirst();
     }
 
-    public List<PortId> getTransitPortIds() {
-        return routeItems.stream()
-                .filter(routeItem -> routeItem.type().equals(RouteItemType.TRANSIT))
-                .map(RouteItem::portId)
+    public List<PortId> getTransit() {
+        return portIds.subList(1, portIds.size()-1)
+                .stream()
                 .toList();
     }
 
-    public PortId getDestinationPortId() {
-        return routeItems.stream()
-                .filter(routeItem -> routeItem.type().equals(RouteItemType.DESTINATION))
-                .findFirst()
-                .map(RouteItem::portId)
-                .orElseThrow(
-                        () -> new IllegalStateException("Destination port not found")
-                );
+    public PortId getDestination() {
+        return portIds.getLast();
     }
 }
